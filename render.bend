@@ -1,19 +1,3 @@
-
-type IO_T
-  = (Done magic expr)
-  | (Call magic func argm cont)
-
-IO_T/MAGIC = (0xD0CA11, 0xFF1FF1)
-
-IO_T/wrap x = (IO_T/Done IO_T/MAGIC x)
-
-IO_T/bind a b = match a {
-  IO_T/Done: (b a.expr)
-  IO_T/Call: (IO_T/Call IO_T/MAGIC a.func a.argm @x (IO_T/bind (a.cont x) b))
-}
-
-call_io func argm = (IO_T/Call IO_T/MAGIC func argm @x (IO_T/Done IO_T/MAGIC x))
-
 sqr x = (* x x)
 
 pow2 0 = 1
@@ -37,9 +21,9 @@ render2 n =
   let p = (/ 1.0 (pow2f n))
   (render2_ n (pow2 n) (- 1.0 p) (* 2.0 p))
 render2_ * 0 * * = *
-render2_ n j y dy = do IO_T {
+render2_ n j y dy = do IO {
   let j = (- j 1)
-  ask * = (call_io "PUT_TEXT" (render n y))
+  ask * = (print (render n y))
   (render2_ n j (- y dy) dy)
 }
 
