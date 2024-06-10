@@ -1,4 +1,4 @@
-main = do IO {
+main = with IO {
   ask * = (print "hello")
   *
 }

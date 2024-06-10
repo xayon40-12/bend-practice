@@ -21,7 +21,7 @@ render2 n =
   let p = (/ 1.0 (pow2f n))
   (render2_ n (pow2 n) (- 1.0 p) (* 2.0 p))
 render2_ * 0 * * = *
-render2_ n j y dy = do IO {
+render2_ n j y dy = with IO {
   let j = (- j 1)
   ask * = (print (render n y))
   (render2_ n j (- y dy) dy)
