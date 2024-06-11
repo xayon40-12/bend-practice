@@ -38,17 +38,19 @@ neg Int/E = Int/E
 map (Int/T n) f = (Int/T (f n))
 map (Int/O n) f = (Int/O (f n))
 map (Int/I n) f = (Int/I (f n))
-map Int/E f = (f Int/E)
+map Int/E _ = Int/E
 
 add (Int/T n) m = (map (dec m) (add n))
 add (Int/O n) m = (map m (add n))
 add (Int/I n) m = (map (inc m) (add n))
 add Int/E m = m
 
-sub m (Int/T n) = (map (inc m) @a (sub a n))
-sub m (Int/O n) = (map m @a (sub a n))
-sub m (Int/I n) = (map (dec m) @a (sub a n))
-sub m Int/E = m
+sub n m = (add n (neg m))
+
+mul Int/E m = (Int/O Int/E)
+mul (Int/T n) m = (sub (mul n (Int/O m)) m)
+mul (Int/O n) m = (mul n (Int/O m))
+mul (Int/I n) m = (add (mul n (Int/O m)) m)
 
 filter_false List/Nil r = r
 filter_false (List/Cons [n [a b]] t) r =
@@ -62,9 +64,10 @@ filter_false (List/Cons v t) r = (filter_false t (List/Cons v r))
 main =
 	let a = [(to_int (inc (from_int +12))) +13]
 	let b = [(to_int (dec (from_int +12))) +11]
-	let c = [(to_int (neg (from_int +12))) -120]
+	let c = [(to_int (neg (from_int +12))) -12]
 	let d = [(to_int (add (from_int -20) (from_int -3))) -23]
-	let e = [(to_int (sub (from_int -4) (from_int +30))) -34]
+	let e = [(to_int (sub (from_int +20) (from_int +45))) -25]
 	let f = [(to_int (from_int -5)) -5]
 	let g = [(to_int (Int/I (Int/T Int/E))) -2]
-	(filter_false [["a" a] ["b" b] ["c" c] ["d" d] ["e" e] ["f" f] ["g" g]] List/Nil)
+	let h = [(to_int (mul (from_int -4) (from_int +50))) -200] 
+	(filter_false [["a" a] ["b" b] ["c" c] ["d" d] ["e" e] ["f" f] ["g" g] ["h" h]] List/Nil)
